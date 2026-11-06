@@ -5,7 +5,7 @@ import '@fontsource-variable/dm-sans'
 import { branches, buildWhatsAppLink, categories, menu } from './menu'
 import './styles.css'
 
-const media = (name) => '/media/' + name + '.webp'
+const media = (name, extension = 'webp') => '/media/' + name + '.' + extension
 
 function Icon({ name, size = 20 }) {
   const paths = {
@@ -49,7 +49,8 @@ function MenuCard({ product, quantity, add }) {
     <article className={'menu-card' + (product.image ? '' : ' menu-card--text')}>
       {product.image && (
         <div className={'menu-photo menu-photo--' + product.category}>
-          <img src={media(product.image)} alt="" width="560" height="420" loading="lazy" />
+          <img src={media(product.image, product.illustration ? 'svg' : 'webp')} alt="" width="560" height="420" loading="lazy" />
+          {product.illustration && <span className="menu-photo-label">Ilustración</span>}
         </div>
       )}
       <div className="menu-card-body">
