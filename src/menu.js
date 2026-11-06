@@ -1,5 +1,5 @@
 export const categories = [
-  { id: 'destacados', label: 'Destacados' },
+  { id: 'toda', label: 'Toda la carta' },
   { id: 'brasa', label: 'A la brasa' },
   { id: 'broaster', label: 'Broaster' },
   { id: 'conos', label: 'Conos' },

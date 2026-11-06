@@ -56,7 +56,7 @@ svg { flex: none; }
 .hero-kicker { color: #e7d3ab; margin-bottom: 19px; }
 .hero-kicker span { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); }
 .hero-kicker b { color: #a88755; font-weight: inherit; margin-inline: 1px; }
-.hero h1 { font: 800 clamp(4.25rem, 7.7vw, 7.35rem)/.89 var(--display); letter-spacing: -.024em; text-transform: uppercase; }
+.hero h1 { font: 800 clamp(4rem, 7.3vw, 7rem)/.89 var(--display); letter-spacing: -.024em; text-transform: uppercase; }
 .hero h1 em { color: var(--yellow); font-style: normal; white-space: nowrap; }
 .hero-description { max-width: 365px; text-wrap: pretty; margin-top: 24px; color: #e5d9c3; font-size: clamp(.96rem, 1.3vw, 1.1rem); line-height: 1.58; }
 .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
@@ -116,6 +116,7 @@ svg { flex: none; }
 .location-top { display: flex; justify-content: space-between; align-items: center; color: #903520; font-size: .68rem; font-weight: 850; letter-spacing: .13em; }
 .location h3 { margin-top: 15px; font: 800 clamp(2.4rem, 4vw, 3.6rem)/.9 var(--display); text-transform: uppercase; }
 .location > p { margin-top: 9px; color: #5d4938; line-height: 1.4; }
+.location-phone { color: #893521; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
 .location-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 15px; margin-top: 18px; }
 .directions-link, .footer-links a { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; font-size: .88rem; font-weight: 750; }
 .directions-link:hover { text-decoration: underline; }
@@ -150,12 +151,12 @@ svg { flex: none; }
 
 @media (max-width: 1150px) {
   .wrap { width: min(100% - 64px, 1248px); }
-  .hero h1 { font-size: clamp(4rem, 8.1vw, 6.1rem); }
+  .hero h1 { font-size: clamp(3.75rem, 7.8vw, 5.9rem); }
 }
 @media (max-width: 880px) {
   .wrap { width: min(100% - 40px, 1248px); }
   .hero-inner { gap: 20px; padding-block: 40px 35px; }
-  .hero h1 { font-size: clamp(3.3rem, 8vw, 5.1rem); }
+  .hero h1 { font-size: clamp(3.15rem, 7.7vw, 5rem); }
   .hero-photo { height: clamp(300px, 44vw, 380px); }
   .photo-caption { padding: 14px 11px; }
   .photo-arrow { width: 31px; height: 31px; }
@@ -175,7 +176,7 @@ svg { flex: none; }
   .hero-inner { grid-template-columns: 1fr; gap: 24px; padding-block: 29px 19px; }
   .hero-copy { padding: 0; }
   .hero-kicker { margin-bottom: 13px; font-size: .63rem; }
-  .hero h1 { font-size: clamp(4rem, 12.7vw, 6rem); }
+  .hero h1 { font-size: clamp(3.75rem, 12.7vw, 6rem); }
   .hero-description { margin-top: 15px; max-width: 340px; line-height: 1.45; }
   .hero-actions { margin-top: 17px; gap: 8px; }
   .hero-actions .button { min-height: 47px; padding-inline: 11px; font-size: .8rem; }
