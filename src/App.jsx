@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { branches, buildWhatsAppLink, categories, menu } from './menu'
+import { useCatalog } from './useCatalog'
+import { money } from './catalog'
 import { photoDimensions } from './photo-dimensions'
 
 const media = (name, extension = 'webp') => '/media/' + name + '.' + extension
-const fullMenu = [...menu.filter((product) => product.featured), ...menu.filter((product) => !product.featured)]
 const whatsappBranch = branches.find((branch) => branch.whatsapp)
 const heroSizes = '(max-width: 690px) 65vw, 560px'
 const menuSizes = '(max-width: 350px) calc(100vw - 32px), (max-width: 690px) 47vw, (max-width: 1312px) 32vw, 406px'
@@ -66,7 +67,9 @@ function MenuCard({ product, quantity, add }) {
         <p className="menu-category">{category.label}</p>
         <h3>{product.name}</h3>
         {product.note && <p className="menu-note">{product.note}</p>}
-        <button type="button" className="add-button" onClick={add} aria-label={'Agregar ' + product.name}>
+        <p className="product-price">{product.priceCents == null ? 'Consultar precio' : money(product.priceCents)}</p>
+        {product.available === false && <p className="sold-out">Agotado</p>}
+        <button type="button" className="add-button" disabled={product.available === false} onClick={add} aria-label={'Agregar ' + product.name}>
           <Icon name="plus" size={17} /> Agregar {quantity > 0 && <span className="item-quantity" aria-hidden="true">{quantity}</span>}
         </button>
       </div>
@@ -74,8 +77,11 @@ function MenuCard({ product, quantity, add }) {
   )
 }
 
-function OrderDialog({ dialogRef, items, selectedId, setSelectedId, changeQuantity, restoreOrderFocus }) {
+function OrderDialog({ dialogRef, items, selectedId, setSelectedId, changeQuantity, restoreOrderFocus, catalogNotice, orderWarning }) {
   const closeButton = useRef(null)
+  const included = items.filter((item) => item.available !== false)
+  const total = included.length && included.every((item) => item.priceCents != null)
+    ? included.reduce((sum, item) => sum + item.priceCents * item.quantity, 0) : null
   const branch = branches.find(({ id }) => id === selectedId)
   return (
     <dialog ref={dialogRef} className="order-dialog" aria-labelledby="order-title" onClose={restoreOrderFocus}>
@@ -83,20 +89,25 @@ function OrderDialog({ dialogRef, items, selectedId, setSelectedId, changeQuanti
         <div><p className="section-label">KING BRAS</p><h2 id="order-title">Tu pedido</h2></div>
         <form method="dialog"><button ref={closeButton} className="icon-button" aria-label="Cerrar pedido" autoFocus><Icon name="close" /></button></form>
       </div>
+      {orderWarning && <p className="catalog-notice" role="status">{orderWarning}</p>}
       {items.length ? (
         <ul className="order-items">
-          {items.map(({ id, name, quantity }) => (
+          {items.map(({ id, name, quantity, available, removed, priceCents }) => (
             <li key={id}>
-              <span>{name}</span>
+              <span>{name}
+                <small className="order-item-note">{available === false ? (removed ? 'Retirado de la carta · excluido del pedido' : 'Agotado · excluido del pedido') : (priceCents == null ? 'Precio por confirmar' : money(priceCents) + ' por unidad')}</small>
+              </span>
               <div className="quantity-control">
                 <button type="button" aria-label={'Quitar una unidad de ' + name} onClick={() => { if (quantity === 1) closeButton.current.focus(); changeQuantity(id, -1) }}><Icon name="minus" size={16} /></button>
                 <span aria-label={quantity + ' unidades'}>{quantity}</span>
-                <button type="button" aria-label={'Agregar una unidad de ' + name} onClick={() => changeQuantity(id, 1)}><Icon name="plus" size={16} /></button>
+                <button type="button" aria-label={'Agregar una unidad de ' + name} disabled={available === false} onClick={() => changeQuantity(id, 1)}><Icon name="plus" size={16} /></button>
               </div>
             </li>
           ))}
         </ul>
       ) : <p className="order-empty">Elige tu sede para consultar o agrega platos de la carta.</p>}
+      {items.length > 0 && <p className="order-total">{total == null ? 'Importe por confirmar' : 'Importe referencial · ' + money(total)}<small>La sede confirma precios y delivery.</small></p>}
+      <p className="catalog-notice" role="status">{catalogNotice}</p>
       <fieldset className="branch-picker">
         <legend>¿En qué sede quieres pedir?</legend>
         {branches.map(({ id, name, address }) => (
@@ -107,7 +118,7 @@ function OrderDialog({ dialogRef, items, selectedId, setSelectedId, changeQuanti
         ))}
       </fieldset>
       {branch.whatsapp ? (
-        <a className="button button--primary dialog-cta" href={buildWhatsAppLink(branch, items)} target="_blank" rel="noreferrer"><Icon name="whatsapp" /> Abrir WhatsApp <Icon name="external" size={17} /></a>
+        <a className="button button--primary dialog-cta" href={buildWhatsAppLink(branch, included)} target="_blank" rel="noreferrer"><Icon name="whatsapp" /> Abrir WhatsApp <Icon name="external" size={17} /></a>
       ) : (
         <a className="button button--primary dialog-cta" href={'tel:+' + branch.phone}><Icon name="phone" /> Llamar al {branch.displayPhone}</a>
       )}
@@ -117,6 +128,14 @@ function OrderDialog({ dialogRef, items, selectedId, setSelectedId, changeQuanti
 }
 
 export default function App() {
+  const catalog = useCatalog()
+  const products = catalog.products
+  const lastProducts = useRef(new Map(menu.map((product) => [product.id, product])))
+  const catalogNotice = catalog.source === 'backup'
+    ? 'Carta de respaldo. Confirma precios y disponibilidad con la sede.'
+    : catalog.stale
+      ? 'Usamos la última carta guardada del ' + new Date(catalog.updatedAt).toLocaleString('es-PE') + '. Confirma precios y disponibilidad con la sede.'
+      : 'Precios referenciales. La sede confirma disponibilidad y delivery.'
   const [category, setCategory] = useState('toda')
   const [quantities, setQuantities] = useState({})
   const [announcement, setAnnouncement] = useState('')
@@ -124,15 +143,33 @@ export default function App() {
   const dialogRef = useRef(null)
   const headerOrderButton = useRef(null)
   const orderOpener = useRef(null)
-  const items = menu.filter(({ id }) => quantities[id] > 0).map((product) => ({ ...product, quantity: quantities[product.id] }))
+  const items = Object.entries(quantities).filter(([, quantity]) => quantity > 0).map(([id, quantity]) => {
+    const current = products.find((product) => product.id === id)
+    const product = current ?? lastProducts.current.get(id)
+    return { ...product, id, quantity, removed: !current, available: current ? current.available : false }
+  })
   const count = items.reduce((total, { quantity }) => total + quantity, 0)
-  const visibleProducts = category === 'toda' ? fullMenu : menu.filter((product) => product.category === category)
+  const fullMenu = [...products.filter((product) => product.featured), ...products.filter((product) => !product.featured)]
+  const visibleProducts = category === 'toda' ? fullMenu : products.filter((product) => product.category === category)
+
+  useEffect(() => {
+    const changed = Object.entries(quantities).some(([id, quantity]) => {
+      const before = lastProducts.current.get(id)
+      const after = products.find((product) => product.id === id)
+      return quantity > 0 && before && (!after || before.priceCents !== after.priceCents || before.available !== after.available)
+    })
+    for (const product of products) lastProducts.current.set(product.id, product)
+    if (changed) setAnnouncement('La carta cambió. Revisa los precios y la disponibilidad de tu pedido.')
+  }, [products, quantities])
 
   function changeQuantity(id, delta) {
+    const product = products.find((product) => product.id === id)
+    if (delta > 0 && (!product || product.available === false)) return
     setQuantities((current) => ({ ...current, [id]: Math.max(0, (current[id] ?? 0) + delta) }))
   }
 
   function addProduct(product) {
+    if (product.available === false) return
     changeQuantity(product.id, 1)
     setAnnouncement(product.name + ' agregado. ' + (count + 1) + ' en tu pedido.')
   }
@@ -192,6 +229,7 @@ export default function App() {
               <div><p className="section-label">01 / LA CARTA</p><h2 id="menu-title">Carta de King Bras</h2></div>
               <p>Del cuarto de pollo al pedido familiar. Elige tus platos y confirma precios y disponibilidad con la sede.</p>
             </div>
+            <p className="catalog-notice" role="status">{catalogNotice}</p>
             <div className="filters" aria-label="Categorías de la carta" role="group">
               {categories.map(({ id, label }) => (
                 <button key={id} type="button" aria-pressed={category === id} onClick={() => setCategory(id)}>{label}</button>
@@ -247,7 +285,7 @@ export default function App() {
         </button>
       )}
       <span className="sr-only" aria-live="polite">{announcement}</span>
-      <OrderDialog dialogRef={dialogRef} items={items} selectedId={selectedId} setSelectedId={setSelectedId} changeQuantity={changeQuantity} restoreOrderFocus={restoreOrderFocus} />
+      <OrderDialog dialogRef={dialogRef} items={items} selectedId={selectedId} setSelectedId={setSelectedId} changeQuantity={changeQuantity} restoreOrderFocus={restoreOrderFocus} catalogNotice={catalogNotice} orderWarning={announcement.startsWith('La carta cambió.') ? announcement : ''} />
     </>
   )
 }

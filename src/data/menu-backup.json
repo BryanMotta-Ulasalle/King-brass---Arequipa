@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": null,
+  "products": [
+    {
+      "id": "brasa-entero",
+      "name": "Pollo a la brasa entero",
+      "description": "La opción para compartir.",
+      "priceCents": null,
+      "category": "brasa",
+      "available": null
+    },
+    {
+      "id": "brasa-cuarto",
+      "name": "¼ de pollo a la brasa",
+      "description": "Porción individual con papas.",
+      "priceCents": null,
+      "category": "brasa",
+      "available": null
+    },
+    {
+      "id": "brasa-medio",
+      "name": "½ pollo a la brasa",
+      "description": "Medio pollo dorado a la brasa.",
+      "priceCents": null,
+      "category": "brasa",
+      "available": null
+    },
+    {
+      "id": "brasa-entero-cuarto",
+      "name": "Pollo a la brasa entero + ¼ de pierna",
+      "description": "Con papas, ensalada, salsas y agua.",
+      "priceCents": null,
+      "category": "brasa",
+      "available": null
+    },
+    {
+      "id": "broaster-medio",
+      "name": "½ pollo broaster",
+      "description": "Pollo apanado, dorado y crujiente.",
+      "priceCents": null,
+      "category": "broaster",
+      "available": null
+    },
+    {
+      "id": "broaster-pierna",
+      "name": "¼ de broaster · Pierna",
+      "description": "Una porción de pierna apanada.",
+      "priceCents": null,
+      "category": "broaster",
+      "available": null
+    },
+    {
+      "id": "broaster-pecho",
+      "name": "¼ de broaster · Pechuga",
+      "description": "Una porción de pechuga apanada.",
+      "priceCents": null,
+      "category": "broaster",
+      "available": null
+    },
+    {
+      "id": "broaster-entero",
+      "name": "Pollo broaster entero",
+      "description": "Piezas crujientes para compartir.",
+      "priceCents": null,
+      "category": "broaster",
+      "available": null
+    },
+    {
+      "id": "broaster-entero-cuarto",
+      "name": "Broaster entero + ¼ de pierna",
+      "description": "Con papas, ensalada y salsas.",
+      "priceCents": null,
+      "category": "broaster",
+      "available": null
+    },
+    {
+      "id": "conazo",
+      "name": "King Conazo broaster",
+      "description": "⅛ de broaster, salchicha, papas, salsas y maracuyá.",
+      "priceCents": null,
+      "category": "conos",
+      "available": null
+    },
+    {
+      "id": "cono-salchicha",
+      "name": "King Cono salchicha",
+      "description": "Salchicha, papas, salsas y maracuyá.",
+      "priceCents": null,
+      "category": "conos",
+      "available": null
+    },
+    {
+      "id": "combo-brasa",
+      "name": "Pollo entero a la brasa + chaufa",
+      "description": "Un pollo entero y arroz chaufa para compartir.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "combo-broaster",
+      "name": "Broaster entero + chaufa",
+      "description": "Pollo broaster entero y arroz chaufa.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "mostrito-brasa",
+      "name": "Mostrito de brasa",
+      "description": "Con ¼ de pollo a la brasa.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "mostrito-broaster-pecho",
+      "name": "Mostrito de broaster · Pechuga",
+      "description": "Con ¼ de pechuga broaster.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "mostrito-broaster-pierna",
+      "name": "Mostrito de broaster · Pierna",
+      "description": "Con ¼ de pierna broaster.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "chaufa-entero",
+      "name": "Porción de chaufa",
+      "description": "Arroz chaufa con pollo.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "chaufa-media",
+      "name": "½ porción de chaufa",
+      "description": "Media porción de arroz chaufa.",
+      "priceCents": null,
+      "category": "combos",
+      "available": null
+    },
+    {
+      "id": "gaseosa-250",
+      "name": "Gaseosa · 250 ml",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "gaseosa-600",
+      "name": "Gaseosa · 600 ml",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "gaseosa-2250",
+      "name": "Gaseosa · 2,25 L",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "gaseosa-3000",
+      "name": "Gaseosa · 3 L",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "chicha-media",
+      "name": "Chicha · ½ L",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "chicha-entera",
+      "name": "Chicha · 1 L",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "maracuya-media",
+      "name": "Maracuyá · ½ L",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    },
+    {
+      "id": "maracuya-entera",
+      "name": "Maracuyá · 1 L",
+      "description": "",
+      "priceCents": null,
+      "category": "bebidas",
+      "available": null
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+import backup from './data/menu-backup.json' with { type: 'json' }
+import { productAssets } from './product-assets.js'
+
 export const categories = [
   { id: 'toda', label: 'Toda la carta' },
   { id: 'brasa', label: 'A la brasa' },
@@ -7,34 +10,15 @@ export const categories = [
   { id: 'bebidas', label: 'Bebidas' },
 ]
 
-export const menu = [
-  { id: 'brasa-entero', category: 'brasa', name: 'Pollo a la brasa entero', note: 'La opción para compartir.', image: 'brasa', featured: true },
-  { id: 'brasa-cuarto', category: 'brasa', name: '¼ de pollo a la brasa', note: 'Porción individual con papas.', image: 'brasa-cuarto' },
-  { id: 'brasa-medio', category: 'brasa', name: '½ pollo a la brasa', note: 'Medio pollo dorado a la brasa.', image: 'brasa-media' },
-  { id: 'brasa-entero-cuarto', category: 'brasa', name: 'Pollo a la brasa entero + ¼ de pierna', note: 'Con papas, ensalada, salsas y agua.', image: 'brasa-entero-cuarto' },
-  { id: 'broaster-medio', category: 'broaster', name: '½ pollo broaster', note: 'Pollo apanado, dorado y crujiente.', image: 'broaster', featured: true },
-  { id: 'broaster-pierna', category: 'broaster', name: '¼ de broaster · Pierna', note: 'Una porción de pierna apanada.', image: 'broaster-pierna' },
-  { id: 'broaster-pecho', category: 'broaster', name: '¼ de broaster · Pechuga', note: 'Una porción de pechuga apanada.', image: 'broaster-cuarto' },
-  { id: 'broaster-entero', category: 'broaster', name: 'Pollo broaster entero', note: 'Piezas crujientes para compartir.', image: 'broaster-entero' },
-  { id: 'broaster-entero-cuarto', category: 'broaster', name: 'Broaster entero + ¼ de pierna', note: 'Con papas, ensalada y salsas.', image: 'broaster-entero-cuarto' },
-  { id: 'conazo', category: 'conos', name: 'King Conazo broaster', note: '⅛ de broaster, salchicha, papas, salsas y maracuyá.', image: 'conazo-galeria', featured: true },
-  { id: 'cono-salchicha', category: 'conos', name: 'King Cono salchicha', note: 'Salchicha, papas, salsas y maracuyá.', image: 'cono-salchicha' },
-  { id: 'combo-brasa', category: 'combos', name: 'Pollo entero a la brasa + chaufa', note: 'Un pollo entero y arroz chaufa para compartir.', image: 'combo-chaufa' },
-  { id: 'combo-broaster', category: 'combos', name: 'Broaster entero + chaufa', note: 'Pollo broaster entero y arroz chaufa.', image: 'combo-chaufa' },
-  { id: 'mostrito-brasa', category: 'combos', name: 'Mostrito de brasa', note: 'Con ¼ de pollo a la brasa.', image: 'mostrito-brasa' },
-  { id: 'mostrito-broaster-pecho', category: 'combos', name: 'Mostrito de broaster · Pechuga', note: 'Con ¼ de pechuga broaster.', image: 'mostrito' },
-  { id: 'mostrito-broaster-pierna', category: 'combos', name: 'Mostrito de broaster · Pierna', note: 'Con ¼ de pierna broaster.', image: 'mostrito-broaster-pierna' },
-  { id: 'chaufa-entero', category: 'combos', name: 'Porción de chaufa', note: 'Arroz chaufa con pollo.', image: 'chaufa' },
-  { id: 'chaufa-media', category: 'combos', name: '½ porción de chaufa', note: 'Media porción de arroz chaufa.', image: 'chaufa-media' },
-  { id: 'gaseosa-250', category: 'bebidas', name: 'Gaseosa · 250 ml', image: 'gaseosa-250' },
-  { id: 'gaseosa-600', category: 'bebidas', name: 'Gaseosa · 600 ml', image: 'gaseosa-600' },
-  { id: 'gaseosa-2250', category: 'bebidas', name: 'Gaseosa · 2,25 L', image: 'gaseosa-2250' },
-  { id: 'gaseosa-3000', category: 'bebidas', name: 'Gaseosa · 3 L', image: 'gaseosa-3000' },
-  { id: 'chicha-media', category: 'bebidas', name: 'Chicha · ½ L', image: 'chicha', illustration: true },
-  { id: 'chicha-entera', category: 'bebidas', name: 'Chicha · 1 L', image: 'chicha', illustration: true },
-  { id: 'maracuya-media', category: 'bebidas', name: 'Maracuyá · ½ L', image: 'refresco-media' },
-  { id: 'maracuya-entera', category: 'bebidas', name: 'Maracuyá · 1 L', image: 'refresco-entero' },
-]
+export const menu = backup.products.map((product) => ({
+  id: product.id,
+  name: product.name,
+  ...(product.description ? { note: product.description } : {}),
+  category: product.category,
+  priceCents: product.priceCents,
+  available: product.available,
+  ...productAssets[product.id],
+}))
 
 export const branches = [
   {
@@ -58,8 +42,12 @@ export const branches = [
 ]
 
 export function buildWhatsAppLink(branch, items) {
-  const lines = items.map(({ name, quantity }) => quantity + ' × ' + name)
-  const order = lines.length ? 'Quisiera pedir:\n' + lines.join('\n') + '\n\n' : 'Quisiera hacer un pedido. '
+  const included = items.filter((item) => item.available !== false)
+  const lines = included.map(({ name, quantity, priceCents }) =>
+    quantity + ' × ' + name + (priceCents == null ? ' (precio por confirmar)' : ' · S/ ' + (priceCents / 100).toFixed(2) + ' c/u'))
+  const total = included.length && included.every((item) => item.priceCents != null)
+    ? '\nImporte referencial: S/ ' + (included.reduce((sum, item) => sum + item.priceCents * item.quantity, 0) / 100).toFixed(2) + ' (sin delivery)' : ''
+  const order = lines.length ? 'Quisiera pedir:\n' + lines.join('\n') + total + '\n\n' : 'Quisiera hacer un pedido. '
   const message = 'Hola, King Bras de ' + branch.name + '. ' + order +
     '¿Me confirman disponibilidad, precios y cobertura de delivery, por favor?'
   return 'https://wa.me/' + branch.phone + '?text=' + encodeURIComponent(message)

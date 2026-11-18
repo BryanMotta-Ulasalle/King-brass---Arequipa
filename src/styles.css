@@ -224,3 +224,9 @@ svg { flex: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
 }
+.product-price { margin-top: 10px; color: #74450f; font-weight: 800; }
+.sold-out { margin-top: 6px; color: #9b2d22; font-weight: 750; font-size: .85rem; }
+.add-button:disabled, .quantity-control button:disabled { cursor: not-allowed; opacity: .55; }
+.catalog-notice { margin: 10px 0; padding: 10px 12px; background: #f6ebd3; border-left: 3px solid #a16d24; color: #59432c; font-size: .83rem; line-height: 1.5; }
+.order-item-note, .order-total small { display: block; margin-top: 5px; color: #65513b; font-size: .78rem; font-weight: 500; }
+.order-total { margin-top: 16px; font-weight: 800; }
