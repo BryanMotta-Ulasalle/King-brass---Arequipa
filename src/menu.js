@@ -36,7 +36,7 @@ export const branches = [
     address: 'Av. Ramón Castilla 1220',
     displayPhone: '972 099 540',
     phone: '51972099540',
-    whatsapp: false,
+    whatsapp: true,
     maps: 'King Bras Av. Ramón Castilla 1220 Cayma Arequipa',
   },
 ]
